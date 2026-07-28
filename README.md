@@ -3,14 +3,20 @@
 [![CircleCI Orb Version](https://badges.circleci.com/orbs/testingbot/testingbot.svg)](https://circleci.com/developer/orbs/orb/testingbot/testingbot)
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
-Run cross-browser and mobile app tests on [TestingBot](https://testingbot.com)
+Run Selenium, Appium, Playwright and Cypress tests on
+[TestingBot](https://testingbot.com)'s cross-browser and real device cloud
 from CircleCI.
 
 This orb manages the [TestingBot Tunnel](https://testingbot.com/support/tunnel),
-which gives TestingBot's browser and device cloud secure access to a web app
-that is only reachable from inside your CircleCI job — an app you just built
-and started on `localhost`, or a staging environment behind a firewall. Without
-a tunnel, TestingBot's browsers cannot reach those hosts.
+which gives TestingBot's browsers and real mobile devices secure access to a
+web app that is only reachable from inside your CircleCI job — an app you just
+built and started on `localhost`, or a staging environment behind a firewall.
+Without a tunnel, TestingBot's browsers cannot reach those hosts.
+
+It works with any test framework that drives a browser through TestingBot,
+including Selenium WebDriver, Appium, Playwright, Cypress, WebdriverIO and
+Nightwatch — the tunnel carries the traffic regardless of which client you
+use.
 
 If your app is already on a public URL, you do not need this orb: point your
 tests at `https://hub.testingbot.com/wd/hub` and go.

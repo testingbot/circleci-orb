@@ -1,12 +1,18 @@
 version: 2.1
 
 description: >
-  Run cross-browser and mobile app tests on TestingBot from CircleCI.
-  Provides commands and a reusable job to install, start and stop the
-  TestingBot Tunnel, giving TestingBot's browser and device cloud secure
-  access to web apps running inside your CircleCI job.
-  Sign up at https://testingbot.com and add your TB_KEY and TB_SECRET as
-  environment variables to get started.
+  Run Selenium, Appium, Playwright and Cypress tests on TestingBot's
+  cross-browser and real device cloud from CircleCI.
+
+  This orb manages the TestingBot Tunnel, which gives TestingBot's browsers
+  and real mobile devices secure access to web apps that are only reachable
+  from inside your CircleCI job -- an app on localhost, a staging
+  environment, or anything behind a firewall. It provides install_tunnel,
+  start_tunnel and stop_tunnel commands, plus a with_tunnel job that wraps
+  your test steps and handles setup and teardown for you.
+
+  Requires a TestingBot account (https://testingbot.com). Add your key and
+  secret as the TB_KEY and TB_SECRET environment variables to get started.
 
 display:
   home_url: "https://testingbot.com"
