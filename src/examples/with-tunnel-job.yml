@@ -1,0 +1,20 @@
+description: >
+  Use the with-tunnel job to wrap your test steps: the orb installs and
+  starts the TestingBot Tunnel, runs your steps, and always stops the
+  tunnel afterwards. Credentials are read from TB_KEY and TB_SECRET.
+
+usage:
+  version: 2.1
+
+  orbs:
+    testingbot: testingbot/testingbot@1.0
+
+  workflows:
+    test:
+      jobs:
+        - testingbot/with-tunnel:
+            tunnel_identifier: circleci-<< pipeline.number >>
+            steps:
+              - run:
+                  name: Run cross-browser tests on TestingBot
+                  command: npm run test:e2e

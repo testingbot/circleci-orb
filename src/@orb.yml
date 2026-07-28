@@ -1,0 +1,13 @@
+version: 2.1
+
+description: >
+  Run cross-browser and mobile app tests on TestingBot from CircleCI.
+  Provides commands and a reusable job to install, start and stop the
+  TestingBot Tunnel, giving TestingBot's browser and device cloud secure
+  access to web apps running inside your CircleCI job.
+  Sign up at https://testingbot.com and add your TB_KEY and TB_SECRET as
+  environment variables to get started.
+
+display:
+  home_url: "https://testingbot.com"
+  source_url: "https://github.com/testingbot/circleci-orb"

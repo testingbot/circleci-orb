@@ -1,0 +1,29 @@
+description: >
+  Use the individual commands to control the TestingBot Tunnel inside your
+  own job. Set TB_KEY and TB_SECRET as environment variables in your
+  CircleCI project settings or in a context, then point your tests at
+  http://localhost:4445/wd/hub.
+
+usage:
+  version: 2.1
+
+  orbs:
+    testingbot: testingbot/testingbot@1.0
+
+  jobs:
+    e2e-tests:
+      executor: testingbot/default
+      steps:
+        - checkout
+        - testingbot/install-tunnel
+        - testingbot/start-tunnel:
+            tunnel_identifier: my-tunnel
+        - run:
+            name: Run Selenium tests through the tunnel
+            command: npm run test:e2e
+        - testingbot/stop-tunnel
+
+  workflows:
+    test:
+      jobs:
+        - e2e-tests

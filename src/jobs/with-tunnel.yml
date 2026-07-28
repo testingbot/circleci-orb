@@ -1,0 +1,65 @@
+description: >
+  Run your test steps with a TestingBot Tunnel active. Installs and starts
+  the tunnel, checks out your code, runs the provided steps, and always
+  stops the tunnel afterwards — even if the tests fail.
+
+parameters:
+  steps:
+    type: steps
+    description: Test steps to run while the tunnel is active.
+  executor:
+    type: executor
+    default: default
+    description: >
+      Executor to run the job on. Must provide Java 11+ for the tunnel;
+      defaults to this orb's cimg/openjdk executor.
+  checkout:
+    type: boolean
+    default: true
+    description: Whether to check out your code before starting the tunnel.
+  key:
+    type: env_var_name
+    default: TB_KEY
+    description: >
+      Name of the environment variable holding your TestingBot key.
+  secret:
+    type: env_var_name
+    default: TB_SECRET
+    description: >
+      Name of the environment variable holding your TestingBot secret.
+  tunnel_identifier:
+    type: string
+    default: ""
+    description: >
+      Optional named identifier for this tunnel. Required when running
+      multiple tunnels in parallel.
+  se_port:
+    type: integer
+    default: 4445
+    description: Local port for the tunnel's Selenium relay.
+  ready_timeout:
+    type: integer
+    default: 120
+    description: Maximum time in seconds to wait for the tunnel to be ready.
+  extra_args:
+    type: string
+    default: ""
+    description: Additional command-line flags passed verbatim to the tunnel.
+
+executor: << parameters.executor >>
+
+steps:
+  - when:
+      condition: << parameters.checkout >>
+      steps:
+        - checkout
+  - install-tunnel
+  - start-tunnel:
+      key: << parameters.key >>
+      secret: << parameters.secret >>
+      tunnel_identifier: << parameters.tunnel_identifier >>
+      se_port: << parameters.se_port >>
+      ready_timeout: << parameters.ready_timeout >>
+      extra_args: << parameters.extra_args >>
+  - steps: << parameters.steps >>
+  - stop-tunnel

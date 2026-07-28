@@ -1,0 +1,60 @@
+description: >
+  Start the TestingBot Tunnel in the background and wait until it is ready.
+  Once ready, point your tests at http://localhost:4445/wd/hub (or the port
+  set with se_port) instead of hub.testingbot.com. Requires the tunnel to be
+  installed first via the install-tunnel command.
+
+parameters:
+  key:
+    type: env_var_name
+    default: TB_KEY
+    description: >
+      Name of the environment variable holding your TestingBot key.
+  secret:
+    type: env_var_name
+    default: TB_SECRET
+    description: >
+      Name of the environment variable holding your TestingBot secret.
+  tunnel_identifier:
+    type: string
+    default: ""
+    description: >
+      Optional named identifier for this tunnel. Required when running
+      multiple tunnels in parallel; pass the same value in your test's
+      desired capabilities.
+  se_port:
+    type: integer
+    default: 4445
+    description: Local port for the tunnel's Selenium relay.
+  ready_timeout:
+    type: integer
+    default: 120
+    description: Maximum time in seconds to wait for the tunnel to be ready.
+  extra_args:
+    type: string
+    default: ""
+    description: >
+      Additional command-line flags passed verbatim to the tunnel jar,
+      e.g. "--nobump --log-level debug".
+  logfile:
+    type: string
+    default: "/tmp/testingbot-tunnel.log"
+    description: Path of the tunnel log file (printed on startup failure).
+  install_dir:
+    type: string
+    default: "~/testingbot-tunnel"
+    description: Directory where the tunnel jar was installed.
+
+steps:
+  - run:
+      name: Start TestingBot Tunnel
+      environment:
+        TB_PARAM_KEY: << parameters.key >>
+        TB_PARAM_SECRET: << parameters.secret >>
+        TB_TUNNEL_IDENTIFIER: << parameters.tunnel_identifier >>
+        TB_SE_PORT: "<< parameters.se_port >>"
+        TB_READY_TIMEOUT: "<< parameters.ready_timeout >>"
+        TB_EXTRA_ARGS: << parameters.extra_args >>
+        TB_LOGFILE: << parameters.logfile >>
+        TB_INSTALL_DIR: << parameters.install_dir >>
+      command: << include(scripts/start-tunnel.sh) >>

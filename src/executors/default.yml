@@ -1,0 +1,12 @@
+description: >
+  Docker executor with a Java runtime, suitable for running the TestingBot
+  Tunnel (which requires Java 11+, 17 LTS recommended).
+
+parameters:
+  tag:
+    type: string
+    default: "17.0"
+    description: Tag of the cimg/openjdk Docker image to use.
+
+docker:
+  - image: cimg/openjdk:<< parameters.tag >>

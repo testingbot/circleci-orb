@@ -1,0 +1,48 @@
+version: 2.1
+
+orbs:
+  orb-tools: circleci/orb-tools@12.4.0
+  # The orb under test is injected into this pipeline by orb-tools/continue.
+  testingbot: {}
+
+filters: &filters
+  tags:
+    only: /.*/
+
+release-filters: &release-filters
+  branches:
+    ignore: /.*/
+  tags:
+    only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+
+jobs:
+  integration-test-tunnel:
+    executor: testingbot/default
+    steps:
+      - testingbot/install-tunnel
+      - testingbot/start-tunnel:
+          tunnel_identifier: circleci-orb-test-<< pipeline.number >>
+      - run:
+          name: Verify local Selenium relay responds
+          command: curl --fail --silent --show-error http://localhost:4445/wd/hub/status
+      - testingbot/stop-tunnel
+
+workflows:
+  test-deploy:
+    jobs:
+      # Requires TB_KEY and TB_SECRET; store them in the
+      # "testingbot-credentials" context on the TestingBot org.
+      - integration-test-tunnel:
+          context: testingbot-credentials
+          filters: *filters
+      - orb-tools/pack:
+          filters: *release-filters
+      - orb-tools/publish:
+          orb_name: testingbot/testingbot
+          vcs_type: << pipeline.project.type >>
+          pub_type: production
+          requires:
+            - orb-tools/pack
+            - integration-test-tunnel
+          context: orb-publishing
+          filters: *release-filters

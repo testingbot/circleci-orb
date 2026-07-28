@@ -1,0 +1,22 @@
+description: >
+  Download and install the TestingBot Tunnel jar. Requires Java 11 or newer
+  on the executor (Java 17 LTS recommended, e.g. the cimg/openjdk:17.0 image
+  or this orb's default executor).
+
+parameters:
+  install_dir:
+    type: string
+    default: "~/testingbot-tunnel"
+    description: Directory to install the tunnel jar into.
+  download_url:
+    type: string
+    default: "https://testingbot.com/downloads/testingbot-tunnel.zip"
+    description: URL of the TestingBot Tunnel zip archive to download.
+
+steps:
+  - run:
+      name: Install TestingBot Tunnel
+      environment:
+        TB_INSTALL_DIR: << parameters.install_dir >>
+        TB_DOWNLOAD_URL: << parameters.download_url >>
+      command: << include(scripts/install-tunnel.sh) >>
