@@ -19,13 +19,13 @@ jobs:
   integration-test-tunnel:
     executor: testingbot/default
     steps:
-      - testingbot/install-tunnel
-      - testingbot/start-tunnel:
+      - testingbot/install_tunnel
+      - testingbot/start_tunnel:
           tunnel_identifier: circleci-orb-test-<< pipeline.number >>
       - run:
           name: Verify local Selenium relay responds
           command: curl --fail --silent --show-error http://localhost:4445/wd/hub/status
-      - testingbot/stop-tunnel
+      - testingbot/stop_tunnel
 
 workflows:
   test-deploy:

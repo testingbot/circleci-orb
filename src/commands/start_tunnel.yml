@@ -2,7 +2,7 @@ description: >
   Start the TestingBot Tunnel in the background and wait until it is ready.
   Once ready, point your tests at http://localhost:4445/wd/hub (or the port
   set with se_port) instead of hub.testingbot.com. Requires the tunnel to be
-  installed first via the install-tunnel command.
+  installed first via the install_tunnel command.
 
 parameters:
   key:
@@ -21,7 +21,9 @@ parameters:
     description: >
       Optional named identifier for this tunnel. Required when running
       multiple tunnels in parallel; pass the same value in your test's
-      desired capabilities.
+      desired capabilities. This is a literal string -- shell variables are
+      not expanded. To build one at runtime, leave this empty and export
+      TB_TUNNEL_IDENTIFIER via BASH_ENV in an earlier step instead.
   se_port:
     type: integer
     default: 4445
@@ -51,10 +53,10 @@ steps:
       environment:
         TB_PARAM_KEY: << parameters.key >>
         TB_PARAM_SECRET: << parameters.secret >>
-        TB_TUNNEL_IDENTIFIER: << parameters.tunnel_identifier >>
+        TB_PARAM_TUNNEL_IDENTIFIER: << parameters.tunnel_identifier >>
         TB_SE_PORT: "<< parameters.se_port >>"
         TB_READY_TIMEOUT: "<< parameters.ready_timeout >>"
         TB_EXTRA_ARGS: << parameters.extra_args >>
         TB_LOGFILE: << parameters.logfile >>
         TB_INSTALL_DIR: << parameters.install_dir >>
-      command: << include(scripts/start-tunnel.sh) >>
+      command: << include(scripts/start_tunnel.sh) >>

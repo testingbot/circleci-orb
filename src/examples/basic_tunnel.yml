@@ -15,13 +15,13 @@ usage:
       executor: testingbot/default
       steps:
         - checkout
-        - testingbot/install-tunnel
-        - testingbot/start-tunnel:
+        - testingbot/install_tunnel
+        - testingbot/start_tunnel:
             tunnel_identifier: my-tunnel
         - run:
             name: Run Selenium tests through the tunnel
             command: npm run test:e2e
-        - testingbot/stop-tunnel
+        - testingbot/stop_tunnel
 
   workflows:
     test:

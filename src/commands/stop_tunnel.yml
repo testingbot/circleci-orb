@@ -1,9 +1,9 @@
 description: >
-  Gracefully stop a TestingBot Tunnel previously started with start-tunnel.
+  Gracefully stop a TestingBot Tunnel previously started with start_tunnel.
   Runs even when earlier steps failed, so the tunnel is always cleaned up.
 
 steps:
   - run:
       name: Stop TestingBot Tunnel
       when: always
-      command: << include(scripts/stop-tunnel.sh) >>
+      command: << include(scripts/stop_tunnel.sh) >>

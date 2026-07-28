@@ -53,8 +53,8 @@ steps:
       condition: << parameters.checkout >>
       steps:
         - checkout
-  - install-tunnel
-  - start-tunnel:
+  - install_tunnel
+  - start_tunnel:
       key: << parameters.key >>
       secret: << parameters.secret >>
       tunnel_identifier: << parameters.tunnel_identifier >>
@@ -62,4 +62,4 @@ steps:
       ready_timeout: << parameters.ready_timeout >>
       extra_args: << parameters.extra_args >>
   - steps: << parameters.steps >>
-  - stop-tunnel
+  - stop_tunnel

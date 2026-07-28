@@ -1,0 +1,60 @@
+name: Bug report
+description: Something in the orb does not work as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please do not paste your TestingBot key or
+        secret, or any build log containing them.
+
+  - type: input
+    id: orb-version
+    attributes:
+      label: Orb version
+      description: The version referenced in your config, e.g. testingbot/testingbot@1.0.0
+      placeholder: testingbot/testingbot@1.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant part of your .circleci/config.yml
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Job output
+      description: >
+        The failing step's output. If the tunnel failed to start, the orb
+        prints the tunnel log — please include it, with credentials removed.
+      render: shell
+
+  - type: input
+    id: executor
+    attributes:
+      label: Executor / image
+      description: Which executor or Docker image the job runs on
+      placeholder: testingbot/default (cimg/openjdk:17.0)
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: TB_KEY and TB_SECRET are set for this job (project env vars or a context)
+        - label: The executor has Java 11 or newer available
+        - label: I have removed all credentials from the output above
+          required: true

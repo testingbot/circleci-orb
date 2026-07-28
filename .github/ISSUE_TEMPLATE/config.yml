@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: TestingBot support
+    url: https://testingbot.com/support
+    about: Questions about TestingBot itself, your account, or test results
+  - name: TestingBot Tunnel issues
+    url: https://github.com/testingbot/Testingbot-Tunnel
+    about: Bugs in the tunnel binary itself, rather than this orb
+  - name: Security vulnerability
+    url: https://github.com/testingbot/circleci-orb/security/policy
+    about: Please report security issues privately, not as a public issue

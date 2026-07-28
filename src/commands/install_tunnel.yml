@@ -19,4 +19,4 @@ steps:
       environment:
         TB_INSTALL_DIR: << parameters.install_dir >>
         TB_DOWNLOAD_URL: << parameters.download_url >>
-      command: << include(scripts/install-tunnel.sh) >>
+      command: << include(scripts/install_tunnel.sh) >>

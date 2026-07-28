@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest a capability or parameter for the orb
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the use case rather than the implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: >
+        If you have a shape in mind — a new command, job, or parameter —
+        sketch it here.
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Current workaround
+      description: >
+        Can this already be done with the `extra_args` parameter, which passes
+        flags straight through to the tunnel?
+
+  - type: markdown
+    attributes:
+      value: |
+        Note that published orb versions are immutable, so renaming or
+        repurposing an existing parameter is a breaking change. New optional
+        parameters are much easier to ship.

@@ -1,5 +1,5 @@
 description: >
-  Use the with-tunnel job to wrap your test steps: the orb installs and
+  Use the with_tunnel job to wrap your test steps: the orb installs and
   starts the TestingBot Tunnel, runs your steps, and always stops the
   tunnel afterwards. Credentials are read from TB_KEY and TB_SECRET.
 
@@ -12,7 +12,7 @@ usage:
   workflows:
     test:
       jobs:
-        - testingbot/with-tunnel:
+        - testingbot/with_tunnel:
             tunnel_identifier: circleci-<< pipeline.number >>
             steps:
               - run:

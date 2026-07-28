@@ -8,7 +8,7 @@ READY_FILE="/tmp/testingbot-tunnel-ready"
 PID_FILE="/tmp/testingbot-tunnel.pid"
 
 if [ ! -f "$JAR" ]; then
-    echo "TestingBot Tunnel is not installed at $JAR. Run the install-tunnel command first." >&2
+    echo "TestingBot Tunnel is not installed at $JAR. Run the install_tunnel command first." >&2
     exit 1
 fi
 
@@ -27,12 +27,32 @@ fi
 # command line and out of `ps` output.
 export TESTINGBOT_KEY TESTINGBOT_SECRET
 
+dump_logs() {
+    if [ -s "${CONSOLE_LOG:-}" ]; then
+        echo "--- tunnel output ---" >&2
+        cat "$CONSOLE_LOG" >&2
+    fi
+    if [ -s "$LOGFILE" ]; then
+        echo "--- tunnel log ($LOGFILE) ---" >&2
+        cat "$LOGFILE" >&2
+    fi
+}
+
 rm -f "$READY_FILE"
 
 ARGS=(-f "$READY_FILE" -P "$TB_SE_PORT" -l "$LOGFILE")
 
-if [ -n "${TB_TUNNEL_IDENTIFIER:-}" ]; then
-    ARGS+=(-i "$TB_TUNNEL_IDENTIFIER")
+# Parameter values are literal (CircleCI does not expand shell variables in
+# them), so fall back to TB_TUNNEL_IDENTIFIER from the environment. That lets
+# callers build an identifier at runtime via BASH_ENV.
+TUNNEL_ID="${TB_PARAM_TUNNEL_IDENTIFIER:-}"
+if [ -z "$TUNNEL_ID" ]; then
+    TUNNEL_ID="${TB_TUNNEL_IDENTIFIER:-}"
+fi
+
+if [ -n "$TUNNEL_ID" ]; then
+    echo "Using tunnel identifier: $TUNNEL_ID"
+    ARGS+=(-i "$TUNNEL_ID")
 fi
 
 if [ -n "${TB_EXTRA_ARGS:-}" ]; then
@@ -41,7 +61,10 @@ if [ -n "${TB_EXTRA_ARGS:-}" ]; then
     ARGS+=($TB_EXTRA_ARGS)
 fi
 
-nohup java -jar "$JAR" "${ARGS[@]}" >/dev/null 2>&1 &
+# Keep the tunnel's own stdout/stderr: fatal errors (bad credentials, tunnel
+# limit reached) are reported there before the log file is opened.
+CONSOLE_LOG="${LOGFILE}.console"
+nohup java -jar "$JAR" "${ARGS[@]}" > "$CONSOLE_LOG" 2>&1 &
 TUNNEL_PID=$!
 echo "$TUNNEL_PID" > "$PID_FILE"
 echo "TestingBot Tunnel starting (pid $TUNNEL_PID), waiting up to ${TB_READY_TIMEOUT}s..."
@@ -49,14 +72,14 @@ echo "TestingBot Tunnel starting (pid $TUNNEL_PID), waiting up to ${TB_READY_TIM
 ELAPSED=0
 while [ ! -f "$READY_FILE" ]; do
     if ! kill -0 "$TUNNEL_PID" 2>/dev/null; then
-        echo "TestingBot Tunnel exited before becoming ready. Tunnel log:" >&2
-        [ -f "$LOGFILE" ] && cat "$LOGFILE" >&2
+        echo "TestingBot Tunnel exited before becoming ready." >&2
+        dump_logs
         rm -f "$PID_FILE"
         exit 1
     fi
     if [ "$ELAPSED" -ge "$TB_READY_TIMEOUT" ]; then
-        echo "TestingBot Tunnel did not become ready within ${TB_READY_TIMEOUT}s. Tunnel log:" >&2
-        [ -f "$LOGFILE" ] && cat "$LOGFILE" >&2
+        echo "TestingBot Tunnel did not become ready within ${TB_READY_TIMEOUT}s." >&2
+        dump_logs
         kill "$TUNNEL_PID" 2>/dev/null || true
         rm -f "$PID_FILE"
         exit 1
