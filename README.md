@@ -1,7 +1,13 @@
-# TestingBot Orb for CircleCI
+<p align="center">
+  <img src="assets/logo.svg" alt="TestingBot" width="140">
+</p>
 
-[![CircleCI Orb Version](https://badges.circleci.com/orbs/testingbot/testingbot.svg)](https://circleci.com/developer/orbs/orb/testingbot/testingbot)
-[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+<h1 align="center">TestingBot Orb for CircleCI</h1>
+
+<p align="center">
+  <a href="https://circleci.com/developer/orbs/orb/testingbot/testingbot"><img src="https://badges.circleci.com/orbs/testingbot/testingbot.svg" alt="CircleCI Orb Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg" alt="License"></a>
+</p>
 
 Run Selenium, Appium, Playwright and Cypress tests on
 [TestingBot](https://testingbot.com)'s cross-browser and real device cloud
